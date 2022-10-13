@@ -1,4 +1,7 @@
-cmake_minimum_required (VERSION 3.0.0)
-project (TAIO_SET_FAMILY_PROJECT)
+cmake_minimum_required (VERSION 3.5)
 
-add_executable(taio_set_family main.cpp)
+project(subprojects)
+
+# Add sub directories
+add_subdirectory(set_parser)
+add_subdirectory(main)

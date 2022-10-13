@@ -1,7 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
-#include "SetParser.h"
+#include "set_parser/SetParser.h"
 
 int main (int argc, char *argv[]){
     std::cout << "Hello world";
