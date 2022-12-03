@@ -5,7 +5,8 @@ project (common)
 add_library(${PROJECT_NAME} 
     src/TaioSet.c
     src/TaioSetFamily.c
-    src/TaioData.c )
+    src/TaioData.c
+    src/TaioHashMap.c)
 
 add_library(lib::common ALIAS ${PROJECT_NAME})
 

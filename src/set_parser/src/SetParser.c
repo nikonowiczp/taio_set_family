@@ -75,14 +75,10 @@ TaioSet *parseSet(char *line)
         exit(EXIT_FAILURE);
     }
     set->Numbers = (int *)malloc(sizeof(int) * set->Count);
-    set->Name = (char *)malloc(sizeof(char) * strlen(pch));
+    set->Name = (char *)malloc(sizeof(char) * (strlen(line)+1));
 
-    strcpy(set->Name, &(line[strlen(pch) + 1]));
+    strcpy(set->Name, line);
     set->Name[strlen(set->Name) - 1] = NULL;
-    for(int i =0;i<strlen(set->Name); i++){
-        if(set->Name[i] == ' ')set->Name[i] = '.';
-    }
-
     for (int i = 0; i < set->Count; i++)
     {
         pch = strtok(NULL, " ");
