@@ -1,6 +1,9 @@
 #include "TaioSet.h"
 
 typedef struct TaioSetFamily{
-    TaioSet* Sets;
+    TaioSet** Sets;
     int SetCount;
 }TaioSetFamily;
+
+
+TaioSetFamily* ParseSetFamily();

@@ -2,7 +2,10 @@
 project (common)
 
 # Add a library with the above sources
-add_library(${PROJECT_NAME} src/TaioSetFamily.c)
+add_library(${PROJECT_NAME} 
+    src/TaioSet.c
+    src/TaioSetFamily.c
+    src/TaioData.c )
 
 add_library(lib::common ALIAS ${PROJECT_NAME})
 

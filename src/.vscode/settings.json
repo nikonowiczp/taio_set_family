@@ -46,6 +46,9 @@
         "stdexcept": "c",
         "streambuf": "c",
         "typeinfo": "c",
-        "setparser.h": "c"
+        "setparser.h": "c",
+        "taiofamilies.h": "c",
+        "taioset.h": "c",
+        "taiosetfamily.h": "c"
     }
 }
