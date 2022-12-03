@@ -1,13 +1,11 @@
 #ifndef __SETPARSER_H__
 #define __SETPARSER_H__
 
-#include <iostream>
-#include <string>
-class SetParser {
-    public:
-    SetParser();
+#include "common/TaioSetFamily.h"
 
-    void ParseFile(std::string pathToFile);
+struct SetParser{
+
 };
+
 
 #endif
