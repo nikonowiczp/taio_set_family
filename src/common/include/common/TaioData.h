@@ -8,5 +8,5 @@ typedef struct TaioData{
     TaioSetFamily* Family2;
 }TaioData;
 
-void printData(TaioData* data);
+void PrintData(TaioData* data);
 #endif

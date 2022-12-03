@@ -8,7 +8,5 @@ typedef struct TaioSetFamily{
     int SetCount;
 }TaioSetFamily;
 
-
-TaioSetFamily* ParseSetFamily();
 void PrintSetFamily(TaioSetFamily * family);
 #endif

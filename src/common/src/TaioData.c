@@ -1,6 +1,6 @@
 #include "common/TaioData.h"
 
-void printData(TaioData* data){
+void PrintData(TaioData* data){
     printf("Printing data families data: \n");
     printf("Printing first family: \n");
     PrintSetFamily(data->Family1);

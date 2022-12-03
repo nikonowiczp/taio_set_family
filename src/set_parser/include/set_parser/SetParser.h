@@ -3,11 +3,7 @@
 
 #include "common/TaioData.h"
 
-typedef struct SetParser{
-
-}SetParser;
-
 TaioData* parseData(char* filename);
-TaioSetFamily* parseFamily(SetParser parser);
-TaioSet* parseSet(SetParser parser);
+TaioSetFamily* parseFamily(FILE * fp);
+TaioSet* parseSet(char* line);
 #endif
