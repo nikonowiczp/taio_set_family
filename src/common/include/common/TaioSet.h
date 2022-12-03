@@ -11,5 +11,4 @@ typedef struct TaioSet
 } TaioSet;
 
 void PrintSet(TaioSet* set);
-void GenerateName(TaioSet* set);
 #endif
