@@ -1,6 +1,7 @@
 #include "set_parser/SetParser.h"
 #include "common/TaioData.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 TaioSetFamily* prepareFirstTestFamily();
 TaioSetFamily* prepareSecondTestFamily();
@@ -13,7 +14,8 @@ int main (int argc, char *argv[]){
     TaioData data;
     data.Family1 = family1;
     data.Family2 = family2;
-    
+
+    printData(&data);
     return 0;
 }
 
@@ -28,13 +30,13 @@ TaioSetFamily* prepareFirstTestFamily(){
     set1->Numbers[1] = 2;
     set1->Numbers[2] = 3;
     TaioSet* set2 = (TaioSet *) malloc (sizeof(TaioSet));
-    set1->Count = 3;
+    set2->Count = 3;
     set2->Numbers = (int*) malloc (sizeof(int)*3);
     set2->Numbers[0] = 2;
     set2->Numbers[1] = 5;
     set2->Numbers[2] = 6;
     TaioSet* set3 = (TaioSet *) malloc (sizeof(TaioSet));
-    set1->Count = 4;
+    set3->Count = 4;
     set3->Numbers = (int*) malloc (sizeof(int)*4);
     set3->Numbers[0] = 1;
     set3->Numbers[1] = 4;
@@ -59,7 +61,7 @@ TaioSetFamily* prepareSecondTestFamily(){
     set1->Numbers = (int*) malloc (sizeof(int)*1);
     set1->Numbers[0] = 7;
     TaioSet* set2 = (TaioSet *) malloc (sizeof(TaioSet));
-    set1->Count = 2;
+    set2->Count = 2;
     set2->Numbers = (int*) malloc (sizeof(int)*2);
     set2->Numbers[0] = 2;
     set2->Numbers[1] = 9;

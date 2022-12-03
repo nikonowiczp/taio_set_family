@@ -1,4 +1,7 @@
-#include "TaioSet.h"
+#ifndef __TAIOSETFAMILY_H__
+#define __TAIOSETFAMILY_H__
+
+#include "common/TaioSet.h"
 
 typedef struct TaioSetFamily{
     TaioSet** Sets;
@@ -7,3 +10,5 @@ typedef struct TaioSetFamily{
 
 
 TaioSetFamily* ParseSetFamily();
+void PrintSetFamily(TaioSetFamily * family);
+#endif

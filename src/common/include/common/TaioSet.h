@@ -1,3 +1,8 @@
+#ifndef __TAIOSET_H__
+#define __TAIOSET_H__
+
+#include <stdio.h>
+
 typedef struct TaioSet
 {
     char* Name;
@@ -5,4 +10,6 @@ typedef struct TaioSet
     int Count;
 } TaioSet;
 
-TaioSet* ParseSet();
+void PrintSet(TaioSet* set);
+void GenerateName(TaioSet* set);
+#endif

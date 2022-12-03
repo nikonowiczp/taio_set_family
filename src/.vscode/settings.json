@@ -49,6 +49,7 @@
         "setparser.h": "c",
         "taiofamilies.h": "c",
         "taioset.h": "c",
-        "taiosetfamily.h": "c"
+        "taiosetfamily.h": "c",
+        "taiodata.h": "c"
     }
 }
