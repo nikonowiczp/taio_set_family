@@ -35,8 +35,8 @@ void GenerateSets(HashMap* map, TaioData* newData){
     int val;
 
     hashmap_foreach(key, val, map) {
-        if(val > 0 )newData->Family1->SetCount +=1;
-        if(val < 0 )newData->Family2->SetCount +=1;
+        if(val > 0 )newData->Family1->SetCount += val;
+        if(val < 0 )newData->Family2->SetCount -= val;
     }
 
     newData->Family1->Sets = (TaioSet*) malloc (sizeof(TaioSet)*newData->Family1->SetCount);
@@ -51,12 +51,16 @@ void GenerateSets(HashMap* map, TaioData* newData){
 
     hashmap_foreach(key, val, map) {
         if(((int)val) > 0 ){
-            newData->Family1->Sets[family1Count] = GetSetFromString(key);
-            family1Count+=1;
+            for(int i = 0; i < val; i++){
+                newData->Family1->Sets[family1Count] = GetSetFromString(key);
+                family1Count+=1;
+            }
         }
         if( ((int)val) < 0 ){
-            newData->Family2->Sets[family2Count] = GetSetFromString(key);
-            family2Count+=1;
+            for(int i =0; i < -1*val; i++){
+                newData->Family2->Sets[family2Count] = GetSetFromString(key);
+                family2Count+=1;
+            }
         }
     }
 
@@ -97,27 +101,27 @@ void FreeHashMap(HashMap* map){
 }
 
 void AddFamily1Set(HashMap* map, TaioSet *set){
-    int *val = hashmap_get(map, set->Name);
+    int val = hashmap_get(map, set->Name);
     if(val == NULL){
         int result = hashmap_put(map, set->Name, 1);
-    }else if(*val == -1){
+    }else if(val == -1){
         val = hashmap_remove(map, set->Name);
     }else{
         val = hashmap_remove(map, set->Name);
-        int result = hashmap_put(map, set->Name, (*val)+1);
+        int result = hashmap_put(map, set->Name, val+1);
     }
 
 }
 void AddFamily2Set(HashMap* map, TaioSet* set){
 
-    int *val = hashmap_get(map, set->Name);
+    int val = hashmap_get(map, set->Name);
     if(val == NULL){
         int result = hashmap_put(map, set->Name, -1);
-    }else if(*val == 1){
+    }else if(val == 1){
         val = hashmap_remove(map, set->Name);
     }else{
         val = hashmap_remove(map, set->Name);
-        int result = hashmap_put(map, set->Name, (*val)-1);
+        int result = hashmap_put(map, set->Name, val-1);
     }
 
 }

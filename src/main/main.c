@@ -16,6 +16,7 @@ int main (int argc, char *argv[]){
 
     PrintData(parsedData);
     map = InitializeHashMap();
+    printf("\n\nReducing data\n\n");
     reducedData = GetReducedFamilyData(map, parsedData);
     printf("\n\nData after reduction\n\n");
     PrintData(reducedData);

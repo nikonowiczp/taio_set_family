@@ -2,7 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+char *ltrim(char *s);
+char *rtrim(char *s);
+char *trim(char *s);
 TaioData *parseData(char *filename)
 {
     FILE *fp;
@@ -78,7 +80,7 @@ TaioSet *parseSet(char *line)
     set->Name = (char *)malloc(sizeof(char) * (strlen(line)+1));
 
     strcpy(set->Name, line);
-    set->Name[strlen(set->Name) - 1] = NULL;
+    set->Name = trim(set->Name);
     for (int i = 0; i < set->Count; i++)
     {
         pch = strtok(NULL, " ");
@@ -93,3 +95,21 @@ TaioSet *parseSet(char *line)
     return set;
 }
 
+char *ltrim(char *s)
+{
+    while(isspace(*s)) s++;
+    return s;
+}
+
+char *rtrim(char *s)
+{
+    char* back = s + strlen(s);
+    while(isspace(*--back));
+    *(back+1) = '\0';
+    return s;
+}
+
+char *trim(char *s)
+{
+    return rtrim(ltrim(s)); 
+}
