@@ -2,9 +2,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-char *ltrim(char *s);
-char *rtrim(char *s);
-char *trim(char *s);
+char* ltrim(char *s);
+char* rtrim(char *s);
+char* trim(char *s);
+void GenerateName(TaioSet* set);
+void SortArray(int* numbers, int count);
 TaioData *parseData(char *filename)
 {
     FILE *fp;
@@ -91,6 +93,8 @@ TaioSet *parseSet(char *line)
         }
         set->Numbers[i] = atoi(pch);
     }
+    //SortArray(set->Name, set->Count);
+    //GenerateName(set);
     free(tmpLine);
     return set;
 }
@@ -112,4 +116,37 @@ char *rtrim(char *s)
 char *trim(char *s)
 {
     return rtrim(ltrim(s)); 
+}
+
+void itoa_new(char* buffer, int number){
+    snprintf(buffer, sizeof(buffer), "%d", number);
+
+}
+void GenerateName(TaioSet* set){
+    printf("Before malloc generate name\n");
+    char *buffer = (char*)malloc(sizeof(char)*(strlen(set->Name)+1));
+    printf("After malloc generate name\n");
+    int currentNameIndex = 0;
+    for(int i=0; i<set->Count; i++){
+        itoa_new(buffer, set->Numbers[i]);
+
+        for(int j =0; j<strlen(buffer)-1; j++){
+            set->Name[currentNameIndex]=buffer[j];
+            currentNameIndex++;
+        }
+    }
+    free(buffer);
+}
+int compare( const void* a, const void* b)
+{
+     int int_a = * ( (int*) a );
+     int int_b = * ( (int*) b );
+
+     if ( int_a == int_b ) return 0;
+     else if ( int_a < int_b ) return -1;
+     else return 1;
+}
+
+void SortArray(int* numbers, int count){
+    qsort( numbers, count, sizeof(int), compare );
 }
