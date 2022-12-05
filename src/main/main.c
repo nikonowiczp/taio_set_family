@@ -45,19 +45,19 @@ int main (int argc, char *argv[]){
         switch(metric){
             case 1:
                 metricValue = MetricOne(map);
-                printf("\n\nCalculated metric = %.2f\n", metricValue);
+                printf("Calculated metric = %.2f\n", metricValue);
                 break;
             case 2:
                 metricValue = MetricTwo(map);
-                printf("\n\nCalculated metric = %d\n", metricValue);
+                printf("Calculated metric = %.0f\n", metricValue);
                 break;
             case 3:
-                printf("Metric as iteration with Jaccard metric:\n");
+                printf("\nMetric as iteration with Jaccard metric:\n");
                 metricValue = MetricOne(map);
-                printf("\n\nCalculated metric = %.2f\n", metricValue);
-                printf("Metric as sum of a difference:\n");
+                printf("Calculated metric = %.2f\n", metricValue);
+                printf("\nMetric as sum of a difference:\n");
                 metricValue = MetricTwo(map);
-                printf("\n\nCalculated metric = %d\n", metricValue);
+                printf("Calculated metric = %.0f\n", metricValue);
                 break;
             default:
                 printf("Sorry, I don't understand.\n");
@@ -155,6 +155,7 @@ double J(TaioSet* X, TaioSet* Y) {
             }
         }
     }
+
     double sum = X->Count + Y->Count - cut;
     return cut/sum;
 }
