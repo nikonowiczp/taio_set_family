@@ -6,7 +6,8 @@ add_library(${PROJECT_NAME}
     src/TaioSet.c
     src/TaioSetFamily.c
     src/TaioData.c
-    src/TaioHashMap.c)
+    src/TaioHashMap.c
+    src/TaioSetList)
 
 add_library(lib::common ALIAS ${PROJECT_NAME})
 
