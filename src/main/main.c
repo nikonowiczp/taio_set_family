@@ -146,13 +146,12 @@ double IterateSets(TaioSetList *A, TaioSetList *B) {
 }
 
 double J(TaioSet* X, TaioSet* Y) {
-    double cut = 0;
-    bool stop = false;
-    for(int i_x = 0; !stop && i_x < X->Count; i_x++) {
-        for(int i_y = 0; !stop && i_y < Y->Count; i_y++) {
+    int cut = 0;
+    for(int i_x = 0; i_x < X->Count; i_x++) {
+        for(int i_y = 0; i_y < Y->Count; i_y++) {
             if(X->Numbers[i_x] == Y->Numbers[i_y]) {
                 cut++;
-                stop = true;
+                break;
             }
         }
     }
