@@ -14,6 +14,10 @@ void PrepareLists(TaioSetList*, TaioSetList*, HashMap*);
 double IterateSets(TaioSetList*, TaioSetList*);
 double J(TaioSet*, TaioSet*);
 
+TaioSet* FamilyToSet(TaioSetFamily*);
+int SetToBin(TaioSet*);
+double AlternativeMetric(TaioData*);
+
 int main (int argc, char *argv[]){
     TaioData *parsedData, *reducedData;
     HashMap *map;
@@ -22,7 +26,7 @@ int main (int argc, char *argv[]){
     char cont = 'Y';
     char* path =(char*)malloc(sizeof(char)*MAXPATH);
 
-    while(cont != 'N') {
+    while(cont == 'y' || cont == 'Y') {
         printf("Please input path to the text file with data: ");
         scanf("%s", path);
 
@@ -58,6 +62,11 @@ int main (int argc, char *argv[]){
                 printf("\nMetric as sum of a difference:\n");
                 metricValue = MetricTwo(map);
                 printf("Calculated metric = %.0f\n", metricValue);
+                break;
+            case 4:
+                printf("\nMetric as simple Jaccard distance between sets:\n");
+                metricValue = AlternativeMetric(parsedData);
+                printf("Calculated metric = %.2f\n", metricValue);
                 break;
             default:
                 printf("Sorry, I don't understand.\n");
@@ -158,4 +167,41 @@ double J(TaioSet* X, TaioSet* Y) {
 
     double sum = X->Count + Y->Count - cut;
     return cut/sum;
+}
+
+TaioSet* FamilyToSet(TaioSetFamily* family) {
+    TaioSet *set = (TaioSet *)malloc(sizeof(TaioSet));
+
+    set->Count = family->SetCount;
+    set->Numbers = (int *)malloc(sizeof(int) * set->Count);
+
+    for(int i = 0; i < set->Count; i++) {
+        set->Numbers[i] = SetToBin(family->Sets[i]);
+    }
+
+    return set;
+}
+
+int SetToBin(TaioSet* set) {
+    int bin = 0;
+
+    for(int i = 0; i < set->Count; i++) {
+        bin |= 1 << (set->Numbers[i] - 1);
+    }
+
+    return bin;
+}
+
+double AlternativeMetric(TaioData* data) {
+    TaioSet* A = FamilyToSet(data->Family1);
+    TaioSet* B = FamilyToSet(data->Family2);
+
+    double jDist = 1 - J(A, B);
+
+    free(A->Numbers);
+    free(A);
+    free(B->Numbers);
+    free(B);
+
+    return jDist;
 }
