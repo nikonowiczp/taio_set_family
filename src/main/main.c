@@ -21,6 +21,8 @@ double AlternativeMetric(TaioData*);
 double CrazyMetric(TaioData*);
 int CountOnes(int);
 
+double CrazyMetricNoLimits(TaioData*);
+
 int main (int argc, char *argv[]){
     TaioData *parsedData, *reducedData;
     HashMap *map;
@@ -77,6 +79,11 @@ int main (int argc, char *argv[]){
                 printf("Calculated metric = %.2f\n", metricValue);
                 break;
             case 6:
+                printf("\nMetric as crazy Jaccard distance between sets with no limits!:\n");
+                metricValue = CrazyMetricNoLimits(parsedData);
+                printf("Calculated metric = %.2f\n", metricValue);
+                break;
+            case 7:
                 printf("\nMetric as iteration with Jaccard metric:\n");
                 metricValue = MetricOne(map);
                 printf("Calculated metric = %.2f\n", metricValue);
@@ -91,6 +98,10 @@ int main (int argc, char *argv[]){
 
                 printf("\nMetric as crazy Jaccard distance between sets:\n");
                 metricValue = CrazyMetric(parsedData);
+                printf("Calculated metric = %.2f\n", metricValue);
+
+                printf("\nMetric as crazy Jaccard distance between sets with no limits!:\n");
+                metricValue = CrazyMetricNoLimits(parsedData);
                 printf("Calculated metric = %.2f\n", metricValue);
 
                 break;
@@ -245,6 +256,9 @@ double CrazyMetric(TaioData* data) {
     TaioSet* B = FamilyToSet(data->Family2);
     int common = 0, different = 0; 
 
+    if(A->Count == 0 && B->Count == 0) return 0;
+    if(A->Count == 0 || B->Count == 0) return 1;
+
     for(int i_a = 0; i_a < A->Count; i_a++) {
         for(int i_b = 0; i_b < B->Count; i_b++) {
             int a = A->Numbers[i_a], b = B->Numbers[i_b];
@@ -263,7 +277,6 @@ double CrazyMetric(TaioData* data) {
     free(B);
 
     if(common == 0) return 1;
-    if(different == 0) return 0;
     return 1 - (different*1.0 / common*1.0) / (common + different)*1.0;
 }
 
@@ -279,4 +292,58 @@ int CountOnes(int N) {
     }
  
     return count;
+}
+
+double CrazyMetricNoLimits(TaioData* data) {
+    TaioSetFamily* A = data->Family1;
+    TaioSetFamily* B = data->Family2;
+    int common = 0, different = 0; 
+
+    if(A->SetCount == 0 && B->SetCount == 0) return 0;
+    if(A->SetCount == 0 || B->SetCount == 0) return 1;
+
+    for(int i_a = 0; i_a < A->SetCount; i_a++) {
+        for(int i_b = 0; i_b < B->SetCount; i_b++) {
+            TaioSet* X = A->Sets[i_a];
+            TaioSet* Y = B->Sets[i_b];
+
+            for(int i_x = 0; i_x < X->Count; i_x++) {
+                bool found_x = false;
+                
+                int prev_x = X->Numbers[(i_x == 0 ? 0 : i_x - 1)];
+
+                for(int i_y = 0; i_y < Y->Count; i_y++) {
+                    bool found_y = false;
+                    int x = X->Numbers[i_x];
+                    int y = Y->Numbers[i_y];
+
+                    if(x == y) {
+                        common++;
+                        found_x = true;
+                        break;
+                    } 
+                    else {
+                        // nie umiem bardziej optymalnie
+                        if(y > prev_x) {
+                            for(int i_xy = i_x; y <= X->Numbers[i_xy] && i_xy > 0; i_xy--) {
+                                int xy = X->Numbers[i_xy];
+
+                                if(xy == y) {
+                                    found_y = true;
+                                    break;
+                                }
+                            }
+
+                            if(!found_y) different++;
+                        }
+                    }
+                }
+
+                if(!found_x) different++;
+            }
+        }
+    }
+
+    if(common == 0) return 1;
+    return 1 - (different*1.0 / common*1.0) / (common + different)*1.0;
 }
