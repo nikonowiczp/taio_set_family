@@ -307,7 +307,7 @@ double MetricThree(HashMap* dictionary, TaioData* data) {
             for(int i_x = 0; i_x < X->Count; i_x++) {
                 bool found_x = false;
                 
-                int prev_x = X->Numbers[(i_x == 0 ? -1 : i_x - 1)];
+                int prev_x = X->Numbers[(i_x == 0 ? 0 : i_x - 1)];
 
                 for(int i_y = 0; i_y < Y->Count; i_y++) {
                     bool found_y = false;
@@ -321,7 +321,7 @@ double MetricThree(HashMap* dictionary, TaioData* data) {
                     } 
                     else {
                         // nie umiem bardziej optymalnie
-                        if(y > prev_x) {
+                        if(y > prev_x && i_x > 0) {
                             for(int i_xy = i_x; y <= X->Numbers[i_xy] && i_xy > 0; i_xy--) {
                                 int xy = X->Numbers[i_xy];
 
