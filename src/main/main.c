@@ -17,8 +17,8 @@ double J(TaioSet*, TaioSet*);
 TaioSet* FamilyToSet(TaioSetFamily*);
 int SetToBin(TaioSet*);
 
-double MetricThree(TaioData*);
-double MetricThreeApprox(TaioData*);
+double MetricThree(HashMap*, TaioData*);
+double MetricThreeApprox(HashMap*, TaioData*);
 int CountOnes(int);
 
 double AlternativeMetric(TaioData*);
@@ -72,12 +72,12 @@ int main (int argc, char *argv[]){
                 break;
             case 4:
                 printf("\nIntuitive metric:\n");
-                metricValue = MetricThree(parsedData);
+                metricValue = MetricThree(map, parsedData);
                 printf("Calculated metric = %.2f\n", metricValue);
                 break;
             case 5:
                 printf("\nApproximated intuitive metric:\n");
-                metricValue = MetricThreeApprox(parsedData);
+                metricValue = MetricThreeApprox(map, parsedData);
                 printf("Calculated metric = %.2f\n", metricValue);
                 break;
             case 6:
@@ -90,11 +90,11 @@ int main (int argc, char *argv[]){
                 printf("Calculated metric = %.0f\n", metricValue);
 
                 printf("\nIntuitive metric:\n");
-                metricValue = MetricThree(parsedData);
+                metricValue = MetricThree(map, parsedData);
                 printf("Calculated metric = %.2f\n", metricValue);
 
                 printf("\nApproximated intuitive metric:\n");
-                metricValue = MetricThreeApprox(parsedData);
+                metricValue = MetricThreeApprox(map, parsedData);
                 printf("Calculated metric = %.2f\n", metricValue);
 
                 break;
@@ -214,6 +214,23 @@ TaioSet* FamilyToSet(TaioSetFamily* family) {
     return set;
 }
 
+TaioSet* ListToSet(TaioSetList* list) {
+    TaioSet *set = (TaioSet *)malloc(sizeof(TaioSet));
+
+    set->Count = list->elemNum;
+    set->Numbers = (int *)malloc(sizeof(int) * set->Count);
+
+    TaioSetListElement* p = list->Head;
+    int i = 0;
+    while(p) {
+        set->Numbers[i] = SetToBin(p->Set);
+        i++;
+        p = p->Next;
+    }
+
+    return set;
+}
+
 // konwertuje zbiór na liczbę binarną (gdy zbiór zawiera liczbę 4, to liczba binarna ma 1 na bin[3])
 int SetToBin(TaioSet* set) {
     int bin = 0;
@@ -244,24 +261,53 @@ double AlternativeMetric(TaioData* data) {
 // porównuje każdy zbiór w rodzinie z każdym
 // zlicza ile każdy zbiór ma wspólnych elementów i ile się różniących
 // metryka to 1 - ( suma_ile_różniących_się / suma_ile_takich_samych ) / (wszystkie_elementy)
-// inaczej :  1 - ( trójkąt(A,B) / iloczyn(A,B) ) / suma(A,B)
-double MetricThree(TaioData* data) {
+// inaczej :  1 - ( trójkąt(A,B) / suma(A,B) )
+double MetricThree(HashMap* dictionary, TaioData* data) {
+    TaioSetList *listA_ex = CreateList();
+    TaioSetList *listB_ex = CreateList();
+    PrepareLists(listA_ex, listB_ex, dictionary);
+
     TaioSetFamily* A = data->Family1;
     TaioSetFamily* B = data->Family2;
+
     int common = 0, different = 0; 
 
     if(A->SetCount == 0 && B->SetCount == 0) return 0;
     if(A->SetCount == 0 || B->SetCount == 0) return 1;
 
     for(int i_a = 0; i_a < A->SetCount; i_a++) {
+        TaioSet* X = A->Sets[i_a];
+
         for(int i_b = 0; i_b < B->SetCount; i_b++) {
-            TaioSet* X = A->Sets[i_a];
             TaioSet* Y = B->Sets[i_b];
+
+            if(strcmp(X->Name, Y->Name) == 0) {
+                for(int i_x = 0; i_x < X->Count; i_x++) {
+                    for(int i_y = 0; i_y < Y->Count; i_y++) {
+                        int x = X->Numbers[i_x];
+                        int y = Y->Numbers[i_y];
+
+                        if(x == y) {
+                            common++;
+                            break;
+                        } 
+                    }
+                }
+            }
+        }
+    }
+
+    TaioSetListElement* A_ex = listA_ex->Head;
+    while(A_ex) {
+        TaioSet* X = A_ex->Set;
+        TaioSetListElement* B_ex =  listB_ex->Head;
+        while(B_ex) {
+            TaioSet* Y = B_ex->Set;
 
             for(int i_x = 0; i_x < X->Count; i_x++) {
                 bool found_x = false;
                 
-                int prev_x = X->Numbers[(i_x == 0 ? 0 : i_x - 1)];
+                int prev_x = X->Numbers[(i_x == 0 ? -1 : i_x - 1)];
 
                 for(int i_y = 0; i_y < Y->Count; i_y++) {
                     bool found_y = false;
@@ -269,8 +315,8 @@ double MetricThree(TaioData* data) {
                     int y = Y->Numbers[i_y];
 
                     if(x == y) {
-                        common++;
                         found_x = true;
+                        common++;
                         break;
                     } 
                     else {
@@ -292,34 +338,56 @@ double MetricThree(TaioData* data) {
 
                 if(!found_x) different++;
             }
+            B_ex = B_ex->Next;
         }
+        A_ex = A_ex->Next;
     }
 
+    FreeList(listA_ex);
+    FreeList(listB_ex);
+
     if(common == 0) return 1;
-    return 1 - (different*1.0 / common*1.0) / (common + different)*1.0;
+    return different*1.0 / (common*1.0 + different*1.0);
 }
 
 // konwetuje rodzinę na zbiór liczb binarnych
 // porównując każdy zbiór z każdym (aka każdy zbiór w rodzinie z każdym)
 // zlicza ile dane liczby binarne mają takich samych 'jedynek' a ile różnych (aka zlicza ile każdy zbiór ma wspólnych elementów i ile różniących się)
-// metryka to 1 - ( suma_ile_różniących_się / suma_ile_takich_samych ) / (suma_jedynek)
-double MetricThreeApprox(TaioData* data) {
+// metryka to 1 - ( suma_ile_różniących_się / suma_jedynek )
+double MetricThreeApprox(HashMap* dictionary, TaioData* data) {
+    TaioSetList *listA = CreateList();
+    TaioSetList *listB = CreateList();
+    PrepareLists(listA, listB, dictionary);
+
+    TaioSet* A_ex = ListToSet(listA);
+    TaioSet* B_ex = ListToSet(listB);
     TaioSet* A = FamilyToSet(data->Family1);
     TaioSet* B = FamilyToSet(data->Family2);
+
     int common = 0, different = 0; 
 
     if(A->Count == 0 && B->Count == 0) return 0;
     if(A->Count == 0 || B->Count == 0) return 1;
 
     for(int i_a = 0; i_a < A->Count; i_a++) {
+        int a = A->Numbers[i_a];
         for(int i_b = 0; i_b < B->Count; i_b++) {
-            int a = A->Numbers[i_a], b = B->Numbers[i_b];
-            int com_1 = 0, diff_1 = 0;
-            com_1 = a&b;
-            diff_1 = a^b;
+            int b = B->Numbers[i_b];
+            if(a == b) {
+                int com_1 = a&b;
+                common += CountOnes(com_1);
+            }
+        }
+    }
 
-            common += CountOnes(com_1);
+     for(int i_a_ex = 0; i_a_ex < A_ex->Count; i_a_ex++) {
+        int a_ex = A_ex->Numbers[i_a_ex];
+        for(int i_b_ex = 0; i_b_ex < B_ex->Count; i_b_ex++) {
+            int b_ex = B_ex->Numbers[i_b_ex];
+            int diff_1 = a_ex^b_ex;
+            int com_1 = a_ex&b_ex;
             different += CountOnes(diff_1);
+            common += CountOnes(com_1);
         }
     }
 
@@ -327,9 +395,11 @@ double MetricThreeApprox(TaioData* data) {
     free(A);
     free(B->Numbers);
     free(B);
+    FreeList(listA);
+    FreeList(listB);
 
     if(common == 0) return 1;
-    return 1 - (different*1.0 / common*1.0) / (common + different)*1.0;
+    return different*1.0 / (common + different);
 }
 
 int CountOnes(int N) {
