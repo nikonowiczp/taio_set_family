@@ -16,12 +16,12 @@ double J(TaioSet*, TaioSet*);
 
 TaioSet* FamilyToSet(TaioSetFamily*);
 int SetToBin(TaioSet*);
-double AlternativeMetric(TaioData*);
 
-double CrazyMetric(TaioData*);
+double MetricThree(TaioData*);
+double MetricThreeApprox(TaioData*);
 int CountOnes(int);
 
-double CrazyMetricNoLimits(TaioData*);
+double AlternativeMetric(TaioData*);
 
 int main (int argc, char *argv[]){
     TaioData *parsedData, *reducedData;
@@ -38,7 +38,9 @@ int main (int argc, char *argv[]){
         printf("Please choose which metric to use (1/2/3): \n");
         printf("1. Iteration with Jaccard metric.\n");
         printf("2. Sum of a difference.\n");
-        printf("3. Both.\n");
+        printf("4. Intuitive metric.\n");
+        printf("5. Aproximated intuitive metric.\n");
+        printf("6. All.\n");
         scanf("%d", &metric);
 
         parsedData = parseData(path);
@@ -69,21 +71,16 @@ int main (int argc, char *argv[]){
                 printf("Calculated metric = %.0f\n", metricValue);
                 break;
             case 4:
-                printf("\nMetric as simple Jaccard distance between sets:\n");
-                metricValue = AlternativeMetric(parsedData);
+                printf("\nIntuitive metric:\n");
+                metricValue = MetricThree(parsedData);
                 printf("Calculated metric = %.2f\n", metricValue);
                 break;
             case 5:
-                printf("\nMetric as crazy Jaccard distance between sets:\n");
-                metricValue = CrazyMetric(parsedData);
+                printf("\nApproximated intuitive metric:\n");
+                metricValue = MetricThreeApprox(parsedData);
                 printf("Calculated metric = %.2f\n", metricValue);
                 break;
             case 6:
-                printf("\nMetric as crazy Jaccard distance between sets with no limits!:\n");
-                metricValue = CrazyMetricNoLimits(parsedData);
-                printf("Calculated metric = %.2f\n", metricValue);
-                break;
-            case 7:
                 printf("\nMetric as iteration with Jaccard metric:\n");
                 metricValue = MetricOne(map);
                 printf("Calculated metric = %.2f\n", metricValue);
@@ -92,16 +89,12 @@ int main (int argc, char *argv[]){
                 metricValue = MetricTwo(map);
                 printf("Calculated metric = %.0f\n", metricValue);
 
-                printf("\nMetric as simple Jaccard distance between sets:\n");
-                metricValue = AlternativeMetric(parsedData);
+                printf("\nIntuitive metric:\n");
+                metricValue = MetricThree(parsedData);
                 printf("Calculated metric = %.2f\n", metricValue);
 
-                printf("\nMetric as crazy Jaccard distance between sets:\n");
-                metricValue = CrazyMetric(parsedData);
-                printf("Calculated metric = %.2f\n", metricValue);
-
-                printf("\nMetric as crazy Jaccard distance between sets with no limits!:\n");
-                metricValue = CrazyMetricNoLimits(parsedData);
+                printf("\nApproximated intuitive metric:\n");
+                metricValue = MetricThreeApprox(parsedData);
                 printf("Calculated metric = %.2f\n", metricValue);
 
                 break;
@@ -247,54 +240,12 @@ double AlternativeMetric(TaioData* data) {
     return jDist;
 }
 
-// konwetuje rodzinę na zbiór liczb binarnych
-// porównując każdy zbiór z każdym (aka każdy zbiór w rodzinie z każdym)
-// zlicza ile dane liczby binarne mają takich samych 'jedynek' a ile różnych (aka zlicza ile każdy zbiór ma wspólnych elementów i ile różniących się)
-// metryka to 1 - (suma_ile_takich_samych / suma_ile_różniących_się) / (wszystkie jedynki)
-double CrazyMetric(TaioData* data) {
-    TaioSet* A = FamilyToSet(data->Family1);
-    TaioSet* B = FamilyToSet(data->Family2);
-    int common = 0, different = 0; 
 
-    if(A->Count == 0 && B->Count == 0) return 0;
-    if(A->Count == 0 || B->Count == 0) return 1;
-
-    for(int i_a = 0; i_a < A->Count; i_a++) {
-        for(int i_b = 0; i_b < B->Count; i_b++) {
-            int a = A->Numbers[i_a], b = B->Numbers[i_b];
-            int com_1 = 0, diff_1 = 0;
-            com_1 = a&b;
-            diff_1 = a^b;
-
-            common += CountOnes(com_1);
-            different += CountOnes(diff_1);
-        }
-    }
-
-    free(A->Numbers);
-    free(A);
-    free(B->Numbers);
-    free(B);
-
-    if(common == 0) return 1;
-    return 1 - (different*1.0 / common*1.0) / (common + different)*1.0;
-}
-
-int CountOnes(int N) {
-    int count = 0;
- 
-    while (N > 0) {
-        if (N & 1) {
-            count++;
-        }
-
-        N = N >> 1;
-    }
- 
-    return count;
-}
-
-double CrazyMetricNoLimits(TaioData* data) {
+// porównuje każdy zbiór w rodzinie z każdym
+// zlicza ile każdy zbiór ma wspólnych elementów i ile się różniących
+// metryka to 1 - ( suma_ile_różniących_się / suma_ile_takich_samych ) / (wszystkie_elementy)
+// inaczej :  1 - ( trójkąt(A,B) / iloczyn(A,B) ) / suma(A,B)
+double MetricThree(TaioData* data) {
     TaioSetFamily* A = data->Family1;
     TaioSetFamily* B = data->Family2;
     int common = 0, different = 0; 
@@ -346,4 +297,51 @@ double CrazyMetricNoLimits(TaioData* data) {
 
     if(common == 0) return 1;
     return 1 - (different*1.0 / common*1.0) / (common + different)*1.0;
+}
+
+// konwetuje rodzinę na zbiór liczb binarnych
+// porównując każdy zbiór z każdym (aka każdy zbiór w rodzinie z każdym)
+// zlicza ile dane liczby binarne mają takich samych 'jedynek' a ile różnych (aka zlicza ile każdy zbiór ma wspólnych elementów i ile różniących się)
+// metryka to 1 - ( suma_ile_różniących_się / suma_ile_takich_samych ) / (suma_jedynek)
+double MetricThreeApprox(TaioData* data) {
+    TaioSet* A = FamilyToSet(data->Family1);
+    TaioSet* B = FamilyToSet(data->Family2);
+    int common = 0, different = 0; 
+
+    if(A->Count == 0 && B->Count == 0) return 0;
+    if(A->Count == 0 || B->Count == 0) return 1;
+
+    for(int i_a = 0; i_a < A->Count; i_a++) {
+        for(int i_b = 0; i_b < B->Count; i_b++) {
+            int a = A->Numbers[i_a], b = B->Numbers[i_b];
+            int com_1 = 0, diff_1 = 0;
+            com_1 = a&b;
+            diff_1 = a^b;
+
+            common += CountOnes(com_1);
+            different += CountOnes(diff_1);
+        }
+    }
+
+    free(A->Numbers);
+    free(A);
+    free(B->Numbers);
+    free(B);
+
+    if(common == 0) return 1;
+    return 1 - (different*1.0 / common*1.0) / (common + different)*1.0;
+}
+
+int CountOnes(int N) {
+    int count = 0;
+ 
+    while (N > 0) {
+        if (N & 1) {
+            count++;
+        }
+
+        N = N >> 1;
+    }
+ 
+    return count;
 }
