@@ -18,6 +18,9 @@ TaioSet* FamilyToSet(TaioSetFamily*);
 int SetToBin(TaioSet*);
 double AlternativeMetric(TaioData*);
 
+double CrazyMetric(TaioData*);
+int CountOnes(int);
+
 int main (int argc, char *argv[]){
     TaioData *parsedData, *reducedData;
     HashMap *map;
@@ -67,6 +70,29 @@ int main (int argc, char *argv[]){
                 printf("\nMetric as simple Jaccard distance between sets:\n");
                 metricValue = AlternativeMetric(parsedData);
                 printf("Calculated metric = %.2f\n", metricValue);
+                break;
+            case 5:
+                printf("\nMetric as crazy Jaccard distance between sets:\n");
+                metricValue = CrazyMetric(parsedData);
+                printf("Calculated metric = %.2f\n", metricValue);
+                break;
+            case 6:
+                printf("\nMetric as iteration with Jaccard metric:\n");
+                metricValue = MetricOne(map);
+                printf("Calculated metric = %.2f\n", metricValue);
+
+                printf("\nMetric as sum of a difference:\n");
+                metricValue = MetricTwo(map);
+                printf("Calculated metric = %.0f\n", metricValue);
+
+                printf("\nMetric as simple Jaccard distance between sets:\n");
+                metricValue = AlternativeMetric(parsedData);
+                printf("Calculated metric = %.2f\n", metricValue);
+
+                printf("\nMetric as crazy Jaccard distance between sets:\n");
+                metricValue = CrazyMetric(parsedData);
+                printf("Calculated metric = %.2f\n", metricValue);
+
                 break;
             default:
                 printf("Sorry, I don't understand.\n");
@@ -156,6 +182,7 @@ double IterateSets(TaioSetList *A, TaioSetList *B) {
 
 double J(TaioSet* X, TaioSet* Y) {
     int cut = 0;
+
     for(int i_x = 0; i_x < X->Count; i_x++) {
         for(int i_y = 0; i_y < Y->Count; i_y++) {
             if(X->Numbers[i_x] == Y->Numbers[i_y]) {
@@ -169,6 +196,7 @@ double J(TaioSet* X, TaioSet* Y) {
     return cut/sum;
 }
 
+// konwertuje rodzinę na zbiór liczb
 TaioSet* FamilyToSet(TaioSetFamily* family) {
     TaioSet *set = (TaioSet *)malloc(sizeof(TaioSet));
 
@@ -182,6 +210,7 @@ TaioSet* FamilyToSet(TaioSetFamily* family) {
     return set;
 }
 
+// konwertuje zbiór na liczbę binarną (gdy zbiór zawiera liczbę 4, to liczba binarna ma 1 na bin[3])
 int SetToBin(TaioSet* set) {
     int bin = 0;
 
@@ -192,6 +221,7 @@ int SetToBin(TaioSet* set) {
     return bin;
 }
 
+// oblicza prostą odległość jaccarda między zbiorami
 double AlternativeMetric(TaioData* data) {
     TaioSet* A = FamilyToSet(data->Family1);
     TaioSet* B = FamilyToSet(data->Family2);
@@ -204,4 +234,50 @@ double AlternativeMetric(TaioData* data) {
     free(B);
 
     return jDist;
+}
+
+// konwetuje rodzinę na zbiór liczb binarnych
+// porównując każdy zbiór z każdym (aka każdy zbiór w rodzinie z każdym)
+// zlicza ile dane liczby binarne mają takich samych 'jedynek' a ile różnych (aka zlicza ile każdy zbiór ma wspólnych elementów i ile różniących się)
+// metryka to 1 - (suma_ile_takich_samych / suma_ile_różniących_się) / (wszystkie jedynki)
+double CrazyMetric(TaioData* data) {
+    TaioSet* A = FamilyToSet(data->Family1);
+    TaioSet* B = FamilyToSet(data->Family2);
+    double result = 0.0;
+    int common = 0, different = 0; 
+
+    for(int i_a = 0; i_a < A->Count; i_a++) {
+        for(int i_b = 0; i_b < B->Count; i_b++) {
+            int a = A->Numbers[i_a], b = B->Numbers[i_b];
+            int com_1 = 0, diff_1 = 0;
+            com_1 = a&b;
+            diff_1 = a^b;
+
+            common += CountOnes(com_1);
+            different += CountOnes(diff_1);
+        }
+    }
+
+    free(A->Numbers);
+    free(A);
+    free(B->Numbers);
+    free(B);
+
+    if(common == 0) return 1;
+    if(different == 0) return 0;
+    return 1 - (different*1.0 / common*1.0) / (common + different)*1.0;
+}
+
+int CountOnes(int N) {
+    int count = 0;
+ 
+    while (N > 0) {
+        if (N & 1) {
+            count++;
+        }
+
+        N = N >> 1;
+    }
+ 
+    return count;
 }
