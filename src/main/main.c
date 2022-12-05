@@ -243,7 +243,6 @@ double AlternativeMetric(TaioData* data) {
 double CrazyMetric(TaioData* data) {
     TaioSet* A = FamilyToSet(data->Family1);
     TaioSet* B = FamilyToSet(data->Family2);
-    double result = 0.0;
     int common = 0, different = 0; 
 
     for(int i_a = 0; i_a < A->Count; i_a++) {
