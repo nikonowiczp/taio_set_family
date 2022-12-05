@@ -200,7 +200,7 @@ double J(TaioSet* X, TaioSet* Y) {
     return cut/sum;
 }
 
-// konwertuje rodzinę na zbiór liczb
+// konwertuje rodzinę na zbiór liczb (liczba: reprezentacja binarna zbioru)
 TaioSet* FamilyToSet(TaioSetFamily* family) {
     TaioSet *set = (TaioSet *)malloc(sizeof(TaioSet));
 
@@ -214,6 +214,7 @@ TaioSet* FamilyToSet(TaioSetFamily* family) {
     return set;
 }
 
+// konwertuje listę zbiorów na zbiór liczb (liczba: reprezentacja binarna zbioru)
 TaioSet* ListToSet(TaioSetList* list) {
     TaioSet *set = (TaioSet *)malloc(sizeof(TaioSet));
 
@@ -303,14 +304,17 @@ double MetricThree(HashMap* dictionary, TaioData* data) {
         TaioSetListElement* B_ex =  listB_ex->Head;
         while(B_ex) {
             TaioSet* Y = B_ex->Set;
+            int max_iy = 0;
+            bool found_x = false;
+            bool found_y = false;
 
             for(int i_x = 0; i_x < X->Count; i_x++) {
-                bool found_x = false;
+                found_x = false;
                 
                 int prev_x = X->Numbers[(i_x == 0 ? 0 : i_x - 1)];
 
-                for(int i_y = 0; i_y < Y->Count; i_y++) {
-                    bool found_y = false;
+                for(int i_y = 0; Y->Numbers[i_y] <= X->Numbers[i_x] && i_y < Y->Count; i_y++) {
+                    found_y = false;
                     int x = X->Numbers[i_x];
                     int y = Y->Numbers[i_y];
 
@@ -320,7 +324,6 @@ double MetricThree(HashMap* dictionary, TaioData* data) {
                         break;
                     } 
                     else {
-                        // nie umiem bardziej optymalnie
                         if(y > prev_x && i_x > 0) {
                             for(int i_xy = i_x; y <= X->Numbers[i_xy] && i_xy > 0; i_xy--) {
                                 int xy = X->Numbers[i_xy];
@@ -331,12 +334,25 @@ double MetricThree(HashMap* dictionary, TaioData* data) {
                                 }
                             }
 
-                            if(!found_y) different++;
+                            if(!found_y) {
+                                different++;
+                            }
+                        }
+                        else if (i_x == 0) {
+                            if(y != X->Numbers[i_x])
+                                different++;
                         }
                     }
+                    max_iy = max_iy < i_y ? i_y : max_iy;
                 }
 
-                if(!found_x) different++;
+                if(!found_x) {
+                    different++;
+                }
+            }
+
+            if(!found_x) {
+                different += (Y->Count - 1) - max_iy; // greatest element in X is less than greates elements in Y (thus those elements in Y are different)
             }
             B_ex = B_ex->Next;
         }
@@ -380,7 +396,7 @@ double MetricThreeApprox(HashMap* dictionary, TaioData* data) {
         }
     }
 
-     for(int i_a_ex = 0; i_a_ex < A_ex->Count; i_a_ex++) {
+    for(int i_a_ex = 0; i_a_ex < A_ex->Count; i_a_ex++) {
         int a_ex = A_ex->Numbers[i_a_ex];
         for(int i_b_ex = 0; i_b_ex < B_ex->Count; i_b_ex++) {
             int b_ex = B_ex->Numbers[i_b_ex];
