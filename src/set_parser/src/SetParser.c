@@ -93,8 +93,8 @@ TaioSet *parseSet(char *line)
         }
         set->Numbers[i] = atoi(pch);
     }
-    //SortArray(set->Name, set->Count);
-    //GenerateName(set);
+    SortArray(set->Numbers, set->Count);
+    GenerateName(set);
     free(tmpLine);
     return set;
 }
@@ -123,18 +123,25 @@ void itoa_new(char* buffer, int number){
 
 }
 void GenerateName(TaioSet* set){
-    printf("Before malloc generate name\n");
     char *buffer = (char*)malloc(sizeof(char)*(strlen(set->Name)+1));
-    printf("After malloc generate name\n");
     int currentNameIndex = 0;
+    printf("Regenerating name");
     for(int i=0; i<set->Count; i++){
         itoa_new(buffer, set->Numbers[i]);
 
-        for(int j =0; j<strlen(buffer)-1; j++){
+        for(int j =0; j<strlen(buffer); j++){
             set->Name[currentNameIndex]=buffer[j];
             currentNameIndex++;
         }
+        if( i <set->Count -1){
+            set->Name[currentNameIndex] = ' ';
+            currentNameIndex++;
+        }
+
     }
+    set->Name[currentNameIndex] = '\0';
+    printf("New name is \"%s\"", set->Name);
+
     free(buffer);
 }
 int compare( const void* a, const void* b)
