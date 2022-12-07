@@ -30,7 +30,45 @@ int main (int argc, char *argv[]){
     double metricValue;
     char cont = 'Y';
     char* path =(char*)malloc(sizeof(char)*MAXPATH);
+    for(int i=0; i<argc;i++){
+        printf("Argument number %d is \"%s\"\n", i, argv[i]);
+    }
+    if(argc == 2 && strcmp(argv[1], "-h") ==0){
+        printf("This program will launch in interactive mode if run without any parameters.\n"
+                "If run with parameters it will try to parse every file provided as argument.\n"
+                "In that case every metric will be printed to stdouut.\n");
+        exit(EXIT_SUCCESS);
+    }
 
+    if(argv > 1){
+        for(int i =1; i<argc; i++){
+                printf("\n\nCalculating metric for file %s\n\n", argv[i]);
+                parsedData = parseData(argv[i]);
+                PrintData(parsedData);
+                map = InitializeHashMap();
+                reducedData = GetReducedFamilyData(map, parsedData);
+                PrintData(reducedData);
+
+                printf("\nMetric as iteration with Jaccard metric:\n");
+                metricValue = MetricOne(map);
+                printf("Calculated metric = %.2f\n", metricValue);
+
+                printf("\nMetric as sum of a difference:\n");
+                metricValue = MetricTwo(map);
+                printf("Calculated metric = %.0f\n", metricValue);
+
+                printf("\nIntuitive metric:\n");
+                metricValue = MetricThree(map, parsedData);
+                printf("Calculated metric = %.2f\n", metricValue);
+
+                printf("\nApproximated intuitive metric:\n");
+                metricValue = MetricThreeApprox(map, parsedData);
+                printf("Calculated metric = %.2f\n", metricValue);
+                FreeHashMap(map);
+
+        }
+        exit(EXIT_SUCCESS);
+    }
     while(cont == 'y' || cont == 'Y') {
         printf("Please input path to the text file with data: ");
         scanf("%s", path);
@@ -44,13 +82,13 @@ int main (int argc, char *argv[]){
         scanf("%d", &metric);
 
         parsedData = parseData(path);
-        printf("\n\nData read\n\n");
+        if(DEBUG) printf("\n\nData read\n\n");
 
         PrintData(parsedData);
         map = InitializeHashMap();
-        printf("\n\nReducing data\n\n");
+        if(DEBUG) printf("\n\nReducing data\n\n");
         reducedData = GetReducedFamilyData(map, parsedData);
-        printf("\n\nData reduced\n\n");
+        if(DEBUG) printf("\n\nData reduced\n\n");
         PrintData(reducedData);
 
         switch(metric){
