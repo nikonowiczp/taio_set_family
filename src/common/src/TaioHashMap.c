@@ -42,12 +42,12 @@ void GenerateSets(HashMap* map, TaioData* newData){
     newData->Family1->Sets = (TaioSet*) malloc (sizeof(TaioSet)*newData->Family1->SetCount);
     newData->Family2->Sets = (TaioSet*) malloc (sizeof(TaioSet)*newData->Family2->SetCount);
 
-    printf("\n\n\nHashmap dump \n\n\n");
+    if(DEBUG) printf("\n\n\nHashmap dump \n\n\n");
 
-    hashmap_foreach(key, val, map) {
+    if(DEBUG) hashmap_foreach(key, val, map) {
         printf("Key \"%s\" value: %d\n", key, val);
     }
-    printf("\n\n\nAfter hashmap dump \n\n\n");
+    if(DEBUG) printf("\n\n\nAfter hashmap dump \n\n\n");
 
     hashmap_foreach(key, val, map) {
         if(((int)val) > 0 ){

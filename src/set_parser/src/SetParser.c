@@ -18,10 +18,10 @@ TaioData *parseData(char *filename)
         printf("File could not be opened");
         exit(EXIT_FAILURE);
     }
-    printf("Parsing data from file %s\n", filename);
-    printf("Parsing family 1\n");
+    if(DEBUG) printf("Parsing data from file %s\n", filename);
+    if(DEBUG) printf("Parsing family 1\n");
     data->Family1 = parseFamily(fp);
-    printf("Parsing family 2\n");
+    if(DEBUG) printf("Parsing family 2\n");
     data->Family2 = parseFamily(fp);
     fclose(fp);
     return data;
@@ -39,7 +39,7 @@ TaioSetFamily *parseFamily(FILE *fp)
         exit(EXIT_FAILURE);
     }
     family->SetCount = atoi(line);
-    printf("Family has %d sets\n", family->SetCount);
+    if(DEBUG) printf("Family has %d sets\n", family->SetCount);
     if (family->SetCount < 0)
     {
         printf("Set count less than 0");
@@ -64,13 +64,13 @@ TaioSetFamily *parseFamily(FILE *fp)
 TaioSet *parseSet(char *line)
 {
     TaioSet *set = (TaioSet *)malloc(sizeof(TaioSet));
-    printf("Parsing set %s\n", line);
+    if(DEBUG) printf("Parsing set %s\n", line);
     char *tmpLine = (char *)malloc(sizeof(char) * (strlen(line) + 1));
 
     strcpy(tmpLine, line);
     char *pch;
 
-    printf("Splitting string \"%s\" into tokens:\n", tmpLine);
+    if(DEBUG) printf("Splitting string \"%s\" into tokens:\n", tmpLine);
     pch = strtok(tmpLine, " ");
     set->Count = atoi(pch);
     if (set->Count < 0)
@@ -93,8 +93,8 @@ TaioSet *parseSet(char *line)
         }
         set->Numbers[i] = atoi(pch);
     }
-    //SortArray(set->Name, set->Count);
-    //GenerateName(set);
+    SortArray(set->Numbers, set->Count);
+    GenerateName(set);
     free(tmpLine);
     return set;
 }
@@ -123,18 +123,34 @@ void itoa_new(char* buffer, int number){
 
 }
 void GenerateName(TaioSet* set){
-    printf("Before malloc generate name\n");
     char *buffer = (char*)malloc(sizeof(char)*(strlen(set->Name)+1));
-    printf("After malloc generate name\n");
     int currentNameIndex = 0;
+    if(DEBUG) printf("Regenerating name");
+    itoa_new(buffer, set->Count);
+    for(int j =0; j<strlen(buffer); j++){
+            set->Name[currentNameIndex]=buffer[j];
+            currentNameIndex++;
+    }
+    if (set->Count > 0){
+        set->Name[currentNameIndex] = ' ';
+        currentNameIndex++;
+    }
     for(int i=0; i<set->Count; i++){
         itoa_new(buffer, set->Numbers[i]);
 
-        for(int j =0; j<strlen(buffer)-1; j++){
+        for(int j =0; j<strlen(buffer); j++){
             set->Name[currentNameIndex]=buffer[j];
             currentNameIndex++;
         }
+        if( i <set->Count -1){
+            set->Name[currentNameIndex] = ' ';
+            currentNameIndex++;
+        }
+
     }
+    set->Name[currentNameIndex] = '\0';
+    if(DEBUG) printf("New name is \"%s\"", set->Name);
+
     free(buffer);
 }
 int compare( const void* a, const void* b)

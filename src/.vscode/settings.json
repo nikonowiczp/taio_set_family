@@ -50,6 +50,7 @@
         "taiofamilies.h": "c",
         "taioset.h": "c",
         "taiosetfamily.h": "c",
-        "taiodata.h": "c"
+        "taiodata.h": "c",
+        "stdio.h": "c"
     }
 }
