@@ -30,9 +30,8 @@ int main (int argc, char *argv[]){
     double metricValue;
     char cont = 'Y';
     char* path =(char*)malloc(sizeof(char)*MAXPATH);
-    for(int i=0; i<argc;i++){
-        printf("Argument number %d is \"%s\"\n", i, argv[i]);
-    }
+
+
     if(argc == 2 && strcmp(argv[1], "-h") ==0){
         printf("This program will launch in interactive mode if run without any parameters.\n"
                 "If run with parameters it will try to parse every file provided as argument.\n"
