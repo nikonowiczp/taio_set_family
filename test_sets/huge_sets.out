@@ -1,0 +1,18 @@
+
+
+Calculating metric for file ./huge_sets
+
+Parsing data took  0.00007200 seconds
+Generating hash map and reducing data took 0.00000400 seconds
+
+Metric as iteration with Jaccard metric:
+Calculated metric = 0.00. It took  0.00000700 seconds
+
+Metric as sum of a difference:
+Calculated metric = 3.00. It took  0.00000100 seconds
+
+Intuitive metric:
+Calculated metric = 0.49. It took  0.00000700 seconds
+
+Approximated intuitive metric:
+Calculated metric = 0.56. It took  0.00000600 seconds

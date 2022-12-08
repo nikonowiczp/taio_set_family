@@ -14,7 +14,7 @@ for FILE in ./* ; do
 	fi
 	echo "Parsing file ${FILE}. Output will be written to ${FILE}.out"
 	
-       	../bin/main/taio_set_family $FILE > ${FILE}.out
+       	../bin/taio_set_family $FILE > ${FILE}.out
 	cat ${FILE}.out >> $ALL_RESULTS_FILE
 done
 

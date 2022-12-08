@@ -1,0 +1,18 @@
+
+
+Calculating metric for file ./random_100_100
+
+Parsing data took  0.00033400 seconds
+Generating hash map and reducing data took 0.00011400 seconds
+
+Metric as iteration with Jaccard metric:
+Calculated metric = 7350.00. It took  0.00112800 seconds
+
+Metric as sum of a difference:
+Calculated metric = 194.00. It took  0.00000200 seconds
+
+Intuitive metric:
+Calculated metric = 0.76. It took  0.00157300 seconds
+
+Approximated intuitive metric:
+Calculated metric = 0.68. It took  0.00041500 seconds

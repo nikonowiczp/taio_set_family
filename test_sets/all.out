@@ -1,0 +1,288 @@
+
+
+Calculating metric for file ./AB
+
+Parsing data took  0.00001500 seconds
+Generating hash map and reducing data took 0.00000300 seconds
+
+Metric as iteration with Jaccard metric:
+Calculated metric = 2.00. It took  0.00000100 seconds
+
+Metric as sum of a difference:
+Calculated metric = 3.00. It took  0.00000000 seconds
+
+Intuitive metric:
+Calculated metric = 0.57. It took  0.00000200 seconds
+
+Approximated intuitive metric:
+Calculated metric = 0.57. It took  0.00000200 seconds
+
+
+Calculating metric for file ./BC
+
+Parsing data took  0.00006100 seconds
+Generating hash map and reducing data took 0.00000200 seconds
+
+Metric as iteration with Jaccard metric:
+Calculated metric = 3.00. It took  0.00000200 seconds
+
+Metric as sum of a difference:
+Calculated metric = 4.00. It took  0.00000000 seconds
+
+Intuitive metric:
+Calculated metric = 0.60. It took  0.00000200 seconds
+
+Approximated intuitive metric:
+Calculated metric = 0.75. It took  0.00000300 seconds
+
+
+Calculating metric for file ./CA
+
+Parsing data took  0.00005200 seconds
+Generating hash map and reducing data took 0.00000300 seconds
+
+Metric as iteration with Jaccard metric:
+Calculated metric = 12.00. It took  0.00000300 seconds
+
+Metric as sum of a difference:
+Calculated metric = 7.00. It took  0.00000100 seconds
+
+Intuitive metric:
+Calculated metric = 1.00. It took  0.00000400 seconds
+
+Approximated intuitive metric:
+Calculated metric = 1.00. It took  0.00000300 seconds
+
+
+Calculating metric for file ./almost_same_10
+
+Parsing data took  0.00006800 seconds
+Generating hash map and reducing data took 0.00000400 seconds
+
+Metric as iteration with Jaccard metric:
+Calculated metric = 0.00. It took  0.00000200 seconds
+
+Metric as sum of a difference:
+Calculated metric = 2.00. It took  0.00000000 seconds
+
+Intuitive metric:
+Calculated metric = 0.04. It took  0.00000300 seconds
+
+Approximated intuitive metric:
+Calculated metric = 0.05. It took  0.00000100 seconds
+
+
+Calculating metric for file ./example_set
+
+Parsing data took  0.00005700 seconds
+Generating hash map and reducing data took 0.00000300 seconds
+
+Metric as iteration with Jaccard metric:
+Calculated metric = 2.00. It took  0.00000400 seconds
+
+Metric as sum of a difference:
+Calculated metric = 5.00. It took  0.00000000 seconds
+
+Intuitive metric:
+Calculated metric = 0.71. It took  0.00000500 seconds
+
+Approximated intuitive metric:
+Calculated metric = 0.71. It took  0.00001500 seconds
+
+
+Calculating metric for file ./huge_sets
+
+Parsing data took  0.00007200 seconds
+Generating hash map and reducing data took 0.00000400 seconds
+
+Metric as iteration with Jaccard metric:
+Calculated metric = 0.00. It took  0.00000700 seconds
+
+Metric as sum of a difference:
+Calculated metric = 3.00. It took  0.00000100 seconds
+
+Intuitive metric:
+Calculated metric = 0.49. It took  0.00000700 seconds
+
+Approximated intuitive metric:
+Calculated metric = 0.56. It took  0.00000600 seconds
+
+
+Calculating metric for file ./myset
+
+Parsing data took  0.00004400 seconds
+Generating hash map and reducing data took 0.00000200 seconds
+
+Metric as iteration with Jaccard metric:
+Calculated metric = 4.00. It took  0.00000400 seconds
+
+Metric as sum of a difference:
+Calculated metric = 5.00. It took  0.00000100 seconds
+
+Intuitive metric:
+Calculated metric = 0.70. It took  0.00000300 seconds
+
+Approximated intuitive metric:
+Calculated metric = 0.71. It took  0.00000300 seconds
+
+
+Calculating metric for file ./random_1
+
+Parsing data took  0.00006600 seconds
+Generating hash map and reducing data took 0.00001200 seconds
+
+Metric as iteration with Jaccard metric:
+Calculated metric = 127.00. It took  0.00003400 seconds
+
+Metric as sum of a difference:
+Calculated metric = 28.00. It took  0.00000100 seconds
+
+Intuitive metric:
+Calculated metric = 0.75. It took  0.00003900 seconds
+
+Approximated intuitive metric:
+Calculated metric = 0.50. It took  0.00002500 seconds
+
+
+Calculating metric for file ./random_10000_10000
+
+Parsing data took  0.02399700 seconds
+Generating hash map and reducing data took 0.01194000 seconds
+
+Metric as iteration with Jaccard metric:
+Calculated metric = 56970533.00. It took  7.72318411 seconds
+
+Metric as sum of a difference:
+Calculated metric = 17338.00. It took  0.00023100 seconds
+
+Intuitive metric:
+Calculated metric = 0.75. It took  12.10313034 seconds
+
+Approximated intuitive metric:
+Calculated metric = 0.65. It took  1.36600399 seconds
+
+
+Calculating metric for file ./random_1000_10
+
+Parsing data took  0.00138400 seconds
+Generating hash map and reducing data took 0.00065600 seconds
+
+Metric as iteration with Jaccard metric:
+Calculated metric = 7875.00. It took  0.00216700 seconds
+
+Metric as sum of a difference:
+Calculated metric = 1010.00. It took  0.00000900 seconds
+
+Intuitive metric:
+Calculated metric = 0.76. It took  0.00246800 seconds
+
+Approximated intuitive metric:
+Calculated metric = 0.67. It took  0.00129400 seconds
+
+
+Calculating metric for file ./random_1000_100
+
+Parsing data took  0.00135400 seconds
+Generating hash map and reducing data took 0.00058200 seconds
+
+Metric as iteration with Jaccard metric:
+Calculated metric = 70285.00. It took  0.00967000 seconds
+
+Metric as sum of a difference:
+Calculated metric = 1082.00. It took  0.00001000 seconds
+
+Intuitive metric:
+Calculated metric = 0.75. It took  0.01409200 seconds
+
+Approximated intuitive metric:
+Calculated metric = 0.67. It took  0.00282400 seconds
+
+
+Calculating metric for file ./random_1000_1000
+
+Parsing data took  0.00263200 seconds
+Generating hash map and reducing data took 0.00116400 seconds
+
+Metric as iteration with Jaccard metric:
+Calculated metric = 648839.00. It took  0.08688500 seconds
+
+Metric as sum of a difference:
+Calculated metric = 1838.00. It took  0.00002900 seconds
+
+Intuitive metric:
+Calculated metric = 0.76. It took  0.12893701 seconds
+
+Approximated intuitive metric:
+Calculated metric = 0.66. It took  0.01782700 seconds
+
+
+Calculating metric for file ./random_100_100
+
+Parsing data took  0.00033400 seconds
+Generating hash map and reducing data took 0.00011400 seconds
+
+Metric as iteration with Jaccard metric:
+Calculated metric = 7350.00. It took  0.00112800 seconds
+
+Metric as sum of a difference:
+Calculated metric = 194.00. It took  0.00000200 seconds
+
+Intuitive metric:
+Calculated metric = 0.76. It took  0.00157300 seconds
+
+Approximated intuitive metric:
+Calculated metric = 0.68. It took  0.00041500 seconds
+
+
+Calculating metric for file ./same_sets
+
+Parsing data took  0.00006800 seconds
+Generating hash map and reducing data took 0.00000200 seconds
+
+Metric as iteration with Jaccard metric:
+Calculated metric = 0.00. It took  0.00000000 seconds
+
+Metric as sum of a difference:
+Calculated metric = 0.00. It took  0.00000000 seconds
+
+Intuitive metric:
+Calculated metric = 0.00. It took  0.00000000 seconds
+
+Approximated intuitive metric:
+Calculated metric = 0.00. It took  0.00000000 seconds
+
+
+Calculating metric for file ./similarAB
+
+Parsing data took  0.00001400 seconds
+Generating hash map and reducing data took 0.00000200 seconds
+
+Metric as iteration with Jaccard metric:
+Calculated metric = 0.00. It took  0.00000100 seconds
+
+Metric as sum of a difference:
+Calculated metric = 2.00. It took  0.00000000 seconds
+
+Intuitive metric:
+Calculated metric = 0.17. It took  0.00000100 seconds
+
+Approximated intuitive metric:
+Calculated metric = 0.17. It took  0.00000200 seconds
+
+
+Calculating metric for file ./similarBA
+
+Parsing data took  0.00003900 seconds
+Generating hash map and reducing data took 0.00000300 seconds
+
+Metric as iteration with Jaccard metric:
+Calculated metric = 0.00. It took  0.00000200 seconds
+
+Metric as sum of a difference:
+Calculated metric = 2.00. It took  0.00000000 seconds
+
+Intuitive metric:
+Calculated metric = 0.17. It took  0.00000100 seconds
+
+Approximated intuitive metric:
+Calculated metric = 0.17. It took  0.00000100 seconds
