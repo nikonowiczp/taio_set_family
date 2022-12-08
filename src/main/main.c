@@ -45,11 +45,22 @@ int main (int argc, char *argv[]){
     if(argc > 1){
         for(int i =1; i<argc; i++){
                 printf("\n\nCalculating metric for file %s\n\n", argv[i]);
+                start = clock();
+
                 parsedData = parseData(argv[i]);
+                end = clock();
+                seconds = (float)(end - start) / CLOCKS_PER_SEC;
+                printf("Parsing data took  %.8f seconds\n", seconds);
+
                 if(DEBUG) PrintData(parsedData);
                 map = InitializeHashMap();
 
+                start = clock();
                 reducedData = GetReducedFamilyData(map, parsedData);
+                end = clock();
+                seconds = (float)(end - start) / CLOCKS_PER_SEC;
+                printf("Generating hash map and reducing data took %.8f seconds\n", seconds);
+
                 if(DEBUG) PrintData(reducedData);
 
                 printf("\nMetric as iteration with Jaccard metric:\n");
