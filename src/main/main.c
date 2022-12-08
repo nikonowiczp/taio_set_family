@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #define MAXPATH 25
 
@@ -25,11 +26,13 @@ double AlternativeMetric(TaioData*);
 
 int main (int argc, char *argv[]){
     TaioData *parsedData, *reducedData;
-    HashMap *map;
+    HashMap *map;             
+    clock_t start, end;
+    float seconds;
     int metric = 0;
     double metricValue;
     char cont = 'Y';
-    char* path =(char*)malloc(sizeof(char)*MAXPATH);
+    char* path;
 
 
     if(argc == 2 && strcmp(argv[1], "-h") ==0){
@@ -39,35 +42,50 @@ int main (int argc, char *argv[]){
         exit(EXIT_SUCCESS);
     }
 
-    if(argv > 1){
+    if(argc > 1){
         for(int i =1; i<argc; i++){
                 printf("\n\nCalculating metric for file %s\n\n", argv[i]);
                 parsedData = parseData(argv[i]);
-                PrintData(parsedData);
+                if(DEBUG) PrintData(parsedData);
                 map = InitializeHashMap();
+
                 reducedData = GetReducedFamilyData(map, parsedData);
-                PrintData(reducedData);
+                if(DEBUG) PrintData(reducedData);
 
                 printf("\nMetric as iteration with Jaccard metric:\n");
+                start = clock();
                 metricValue = MetricOne(map);
-                printf("Calculated metric = %.2f\n", metricValue);
+                end = clock();
+                seconds = (float)(end - start) / CLOCKS_PER_SEC;
+
+                printf("Calculated metric = %.2f. It took  %.8f seconds\n", metricValue, seconds);
 
                 printf("\nMetric as sum of a difference:\n");
+                start = clock();
                 metricValue = MetricTwo(map);
-                printf("Calculated metric = %.0f\n", metricValue);
+                end = clock();
+                seconds = (float)(end - start) / CLOCKS_PER_SEC;
+                printf("Calculated metric = %.2f. It took  %.8f seconds\n", metricValue, seconds);
 
                 printf("\nIntuitive metric:\n");
+                start = clock();
                 metricValue = MetricThree(map, parsedData);
-                printf("Calculated metric = %.2f\n", metricValue);
+                end = clock();
+                seconds = (float)(end - start) / CLOCKS_PER_SEC;
+                printf("Calculated metric = %.2f. It took  %.8f seconds\n", metricValue, seconds);
 
                 printf("\nApproximated intuitive metric:\n");
+                start = clock();
                 metricValue = MetricThreeApprox(map, parsedData);
-                printf("Calculated metric = %.2f\n", metricValue);
+                end = clock();
+                seconds = (float)(end - start) / CLOCKS_PER_SEC;
+                printf("Calculated metric = %.2f. It took  %.8f seconds\n", metricValue, seconds);
                 FreeHashMap(map);
 
         }
         exit(EXIT_SUCCESS);
     }
+    path =(char*)malloc(sizeof(char)*MAXPATH);
     while(cont == 'y' || cont == 'Y') {
         printf("Please input path to the text file with data: ");
         scanf("%s", path);
@@ -83,7 +101,7 @@ int main (int argc, char *argv[]){
         parsedData = parseData(path);
         if(DEBUG) printf("\n\nData read\n\n");
 
-        PrintData(parsedData);
+        if(DEBUG) PrintData(parsedData);
         map = InitializeHashMap();
         if(DEBUG) printf("\n\nReducing data\n\n");
         reducedData = GetReducedFamilyData(map, parsedData);
@@ -165,12 +183,17 @@ int MetricTwo(HashMap* dictionary){
 }
 
 int MetricOne(HashMap* dictionary) {
+    if(DEBUG) printf("Metric one\n");
+
     TaioSetList *listA = CreateList();
     TaioSetList *listB = CreateList();
-
+    
+    if(DEBUG) printf("Prepare lists\n");
     PrepareLists(listA, listB, dictionary);
 
+    if(DEBUG) printf("Iterate sets\n");
     double res = IterateSets(listA, listB);
+    if(DEBUG) printf("Free lists\n");
 
     FreeList(listA);
     FreeList(listB);
@@ -209,12 +232,20 @@ double IterateSets(TaioSetList *A, TaioSetList *B) {
         return A->elemNum;
 
     TaioSetListElement *X = A->Head;
+
+    if(DEBUG) printf("Begin while\n");
+
     while(X) {
+        if(DEBUG) printf("1\n");
         TaioSetListElement *Y = B->Head;
+        if(DEBUG) printf("2\n");
         while(Y) {
+            if(DEBUG) printf("3\n");
             sum += 1 - J(X->Set, Y->Set);
+            if(DEBUG) printf("4\n");
             Y = Y->Next;
         }
+        if(DEBUG) printf("5\n");
         X = X->Next;
     }
 
@@ -222,10 +253,12 @@ double IterateSets(TaioSetList *A, TaioSetList *B) {
 }
 
 double J(TaioSet* X, TaioSet* Y) {
+    if(DEBUG) printf("Begin J\n");
     int cut = 0;
 
     for(int i_x = 0; i_x < X->Count; i_x++) {
         for(int i_y = 0; i_y < Y->Count; i_y++) {
+            if(DEBUG) printf("i_x = %d, i_y=%d\n");
             if(X->Numbers[i_x] == Y->Numbers[i_y]) {
                 cut++;
                 break;

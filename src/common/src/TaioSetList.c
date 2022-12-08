@@ -52,7 +52,8 @@ void InsertLast(TaioSetList* list, TaioSet* set) {
 
     TaioSetListElement *p = (TaioSetListElement *)malloc(sizeof(TaioSetListElement));
     p->Set = set;
-
+    p->Next = NULL;
+    
     if(list->Head == NULL) {
         list->Head = p;
         list->Tail = p;

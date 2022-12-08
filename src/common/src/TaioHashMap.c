@@ -44,8 +44,10 @@ void GenerateSets(HashMap* map, TaioData* newData){
 
     if(DEBUG) printf("\n\n\nHashmap dump \n\n\n");
 
-    if(DEBUG) hashmap_foreach(key, val, map) {
+    if(DEBUG) {
+        hashmap_foreach(key, val, map) {
         printf("Key \"%s\" value: %d\n", key, val);
+    }
     }
     if(DEBUG) printf("\n\n\nAfter hashmap dump \n\n\n");
 
@@ -63,26 +65,33 @@ void GenerateSets(HashMap* map, TaioData* newData){
             }
         }
     }
+    if(DEBUG) printf("End generate sets\n");
 
     return newData;
 }
 TaioSet* GetSetFromString(char* line){
+    if(DEBUG) printf("Get set from string \"%s\"\n", line);
+    if(DEBUG) printf("boo\n");
     TaioSet* set = (TaioSet*) malloc(sizeof(TaioSet));
+    if(DEBUG) printf("Before string malloc\n");
+
     char *pch;
+
     char *tmpLine = (char *)malloc(sizeof(char) * (strlen(line) + 1));
     strcpy(tmpLine, line);
     pch = strtok(tmpLine, " ");
     set->Count = atoi(pch);
+    if(DEBUG) printf("Set has count %d\n", set->Count);
+
     if (set->Count < 0)
     {
         printf("Set count is smaller than 0");
         exit(EXIT_FAILURE);
     }
     set->Numbers = (int *)malloc(sizeof(int) * set->Count);
-    set->Name = (char *)malloc(sizeof(char) * strlen(line+1));
+    set->Name = (char *)malloc(sizeof(char) * strlen(line)+1);
 
     strcpy(set->Name, line);
-
     for (int i = 0; i < set->Count; i++)
     {
         pch = strtok(NULL, " ");
@@ -92,8 +101,12 @@ TaioSet* GetSetFromString(char* line){
             exit(EXIT_FAILURE);
         }
         set->Numbers[i] = atoi(pch);
+        if(DEBUG) printf("Parsed number %d\n", set->Numbers[i]);
+
     }
     free(tmpLine);
+    if(DEBUG) printf("End generate string\n");
+
     return set;
 }
 void FreeHashMap(HashMap* map){
