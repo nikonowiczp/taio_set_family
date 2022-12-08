@@ -19,4 +19,6 @@ Tryb interaktywny pozwala wpisywać w pętli pliki oraz wybierać jakie metryki 
 Gdy program będzie uruchomiony z (dowolną ilością) parametrów będą one potraktowane jako ścieżki do plików.
 Program wywoła wtedy wszystkie metryki dla każdego z tych plików i będzie je po kolei wypisywać na stdout, które można przekierować do pliku.
 
-W folderze test_sets znajdują się przykładowe metryki i wyniki dla nich (pliki .out)
+W folderze test_sets znajdują się przykładowe metryki i wyniki dla nich (pliki .out). Folder src zawiera pliki źródłowe.
+
+Plik binarny został skompilowany na systemie Ubuntu 20.04 używając gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
