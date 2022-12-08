@@ -398,6 +398,8 @@ double MetricThree(HashMap* dictionary, TaioData* data) {
                     found_y = false;
                     int x = X->Numbers[i_x];
                     int y = Y->Numbers[i_y];
+                    
+                    max_iy = max_iy < i_y ? i_y : max_iy;
 
                     if(x == y) {
                         found_x = true;
@@ -424,16 +426,14 @@ double MetricThree(HashMap* dictionary, TaioData* data) {
                                 different++;
                         }
                     }
-                    max_iy = max_iy < i_y ? i_y : max_iy;
                 }
 
                 if(!found_x) {
                     different++;
                 }
-            }
-
-            if(!found_x) {
-                different += (Y->Count - 1) - max_iy; // greatest element in X is less than greates elements in Y (thus those elements in Y are different)
+                if(i_x == X->Count - 1) {
+                    different += (Y->Count - 1) - max_iy; // greatest element in X is less than greates elements in Y (thus those elements in Y are different)
+                }
             }
             B_ex = B_ex->Next;
         }
