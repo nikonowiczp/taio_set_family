@@ -13,7 +13,6 @@
 
 
 void RunSet(char* filePath, int metricsToRun, void (*printLineToOutput)(const char * format, ...)){
-    printf("Metrics to run was %d\n", metricsToRun);
     TaioData *parsedData, *reducedData;
     HashMap *map;
     clock_t start, end;
