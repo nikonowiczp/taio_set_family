@@ -1,24 +1,32 @@
-Program należy uruchamiać w środowisku UNIX. 
+INSTRUKCJA
 
-Wszystkie skrypty należy uruchamiać mając working directory w folderze scripts.
+W folderze bin znajdują się dwa foldery - taio_gui oraz taio_console.
 
-Obsługę programu najlepiej przeprowadzić używając skryptów znajdujących się w folderze scripts.
+Istnieje statyczny limit długości ścieżki do plików: MAXPATH 2048, znajduje się w pliku src/taio_console/main.c
+Istnieje statyczny limit długości linii w pliku wejściowym: MAX_LENGTH 32768 w pliku src/taio_lib/SetParser.h
 
-Skrypt install_requirements.sh instaluje pakiety wymagane do uruchomienia projektu (cmake i build-essentialls).
-Należy go uruchomić jako root.
+Taio_gui to wersja rozwiązania z interfejsem użytkownika, taio_console bez.
+Oba rozwiązania wykonują ten sam kod (napisany w języku C).
+Zalecane jest używane wersji GUI - jest ona łatwiejsza w użytkowaniu.
+Pozwala wczytywać i wykonywać algorytmy dla całych folderów lub plików wybranych w eksploratorze windows.
 
-Skrypt compile.sh kompiluje rozwiązanie do folderu bin.
-Skrypt run_tests.sh wykonuje kalkulacje dla wszystkich plików z rodzinami znajdującymi się w folderze test_sets. 
-Dla każdego pliku o nazwie $FILE tworzony jest plik ${FILE}.out z wynkiem programu.
-Aby dodać własne pliki do przetestowania należy jedynie wkleić je do folderu test_sets.
+Taio_console to wersja konsolowa. Pozwala ona na zapętlone wczytywanie programów oraz zapisywanie wyników do plików.
+Taio_console posiada również tryb nieinteraktywny. 
+Wystarczy jako pierwszy argument podać folder wyjściowy a jako kolejne wpisywać pliki wejściowe. 
+Uruchomić z argumentem -h aby wyświetlić pomoc.
 
-Obsługa programu.
-Gdy program zostanie uruchomiony bez parametrów zostanie uruchomiony tryb interaktywny. 
-Tryb interaktywny pozwala wpisywać w pętli pliki oraz wybierać jakie metryki mają być dla nich wykonane,
+KOMPILACJA
 
-Gdy program będzie uruchomiony z (dowolną ilością) parametrów będą one potraktowane jako ścieżki do plików.
-Program wywoła wtedy wszystkie metryki dla każdego z tych plików i będzie je po kolei wypisywać na stdout, które można przekierować do pliku.
+Kompilacja wersji taio_console wymaga jedynie kompilatora języka C. 
+Została przetestowana i skompilowana za pomocą kompilatora mingw81_32.
 
-W folderze test_sets znajdują się przykładowe metryki i wyniki dla nich (pliki .out). Folder src zawiera pliki źródłowe.
+Kompilacja wersji taio_gui wymaga posiadania zainstalowanych bibliotek Qt5.
+Została przetestowana i skompilowana za pomocą kompilatora mingw81_32 i wersji biblioteki QT 5.15.2
 
-Plik binarny został skompilowany na systemie Ubuntu 20.04 używając gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
+Do tworzenia plików kompilacji używany jest CMake, a do kompilacji może być dowolny program typu make.
+Aby skompilować tylko projekt taio_console należy użyć komendy 
+Build: cmake.exe --build ${OUTPUT} --target taio_console
+${OUTPUT} to folder wyjściowy. Analogicznie dla projektu taio_gui lub all aby skompilować oba.
+
+Aby skompilować którykolwiek projekt należy posiadać odpowiednio skonfigurowane środowisko:
+w zmiennej PATH musi znaleźć się cmake, kompilator i w przypadku GUI również odpowiedni qmake(dla takiego samego kompilatora jak używany).

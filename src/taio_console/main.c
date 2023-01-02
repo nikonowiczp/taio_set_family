@@ -27,8 +27,8 @@ int main (int argc, char *argv[]){
 
     if(argc == 2 && strcmp(argv[1], "-h") == 0){
         printf("This program will launch in interactive mode if run without any parameters.\n"
-                "If run with parameters it will try to parse every file provided as argument.\n"
-                "In that case every metric will be printed to stdouut.\n");
+                "If run with parameters first argument must be an output folder to save the files to.\n"
+                "Every argument after that must be a file to parse. Output will be saved in seperate files\n");
         exit(EXIT_SUCCESS);
     }
 
@@ -49,7 +49,7 @@ int main (int argc, char *argv[]){
         exit(EXIT_SUCCESS);
     }
     path =(char*)malloc(sizeof(char)*MAXPATH);
-    printf("\n\nPlease choose output folder for files\n");
+    printf("\nPlease choose output folder for files\n");
     scanf("%s", output_directory);
 
 
