@@ -3,11 +3,7 @@
 #include "QDebug"
 #include <QFileDialog>
 
-// Magia, nie wiem czemu to pomaga ale pomaga
-extern "C" {
-    #include "SetRunner.h"
-}
-QStringList MainWindow::currentLines = QStringList();
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -16,6 +12,12 @@ MainWindow::MainWindow(QWidget *parent)
     chosenFolder = QDir::currentPath();
     ui->setupUi(this);
     ui->outputFolderLineEdit->setText(chosenFolder);
+    CalculatingWorker *worker = new CalculatingWorker;
+    worker->moveToThread(&workerThread);
+    connect(&workerThread, &QThread::finished, worker, &QObject::deleteLater);
+    connect(this, &MainWindow::operate, worker, &CalculatingWorker::doWork);
+    connect(worker, &CalculatingWorker::resultReady, this, &MainWindow::handleResults);
+    workerThread.start();
 }
 
 MainWindow::~MainWindow()
@@ -55,65 +57,44 @@ void MainWindow::on_chooseFolderButton_clicked(){
     qDebug()<<files;
     foreach(auto file, files){
         addFileToList(file.absoluteFilePath());
-
     }
 }
 void MainWindow::on_simulateAllButton_clicked(){
     qDebug() << "Simulate all button clicked";
-    foreach(auto file, *ChosenFiles){
-        runSimulationForFile(file);
-    }
-    qDebug()<<outputs;
-    auto dialog = new ResultDialog(chosenFolder, outputs ,this);
-    dialog->show();
+    setLoading(false);
+
+    emit this->operate(*ChosenFiles);
 }
+
 void MainWindow::on_simulateChosenButton_clicked(){
     qDebug() << "Simulate one button clicked";
 
 }
+
 void MainWindow::addFileToList(QString file){
-    qDebug()<<"Adding file "<< file;
-    ChosenFiles->append(file);
-    ui->listWidget->addItem(file);
+    if(!ChosenFiles->contains(file)){
+        qDebug()<<"Adding file "<< file;
+        ChosenFiles->append(file);
+        ui->listWidget->addItem(file);
+    }
+
 }
+
 void MainWindow::addFilesToList(QStringList files){
     foreach(auto file, files){
         addFileToList(file);
     }
 }
-void MainWindow::runSimulationForFile(QString fileName){
-    QByteArray fileArray = fileName.toLocal8Bit();
-    QFile file(fileName);
-    file.open(QIODevice::ReadOnly);
-    QTextStream in(&file);
-    while (!in.atEnd()) {
-        QString line = in.readLine();
-        printLineToOutput(line.toLocal8Bit().data());
-    }
-    file.close();
 
-    RunSet(fileArray.data(), METRIC_ALL, printLineToOutput);
-    saveOutput(fileName);
+void MainWindow::handleResults(const QMap<QString, QStringList> *outputs){
+    QMap<QString, QStringList> result = *outputs;
+    auto dialog = new ResultDialog(chosenFolder, result ,this);
+    dialog->show();
+    setLoading(true);
 }
-void MainWindow::printLineToOutput(const char * format, ...){
-    char buffer[256];
-
-    va_list argptr;
-    va_start(argptr, format);
-    QString str;
-    str.vsprintf(format, argptr);
-    //vsnprintf (buffer, 255, format, argptr);
-    qDebug()<<str;
-    //str =  str.sprintf(format, argptr);
-    //str = str.trimmed();
-    //qDebug() << str;
-    currentLines.append(str);
-    va_end(argptr);
+void MainWindow::setLoading(bool newState){
+    ui->chooseFilesButton->setEnabled(newState);
+    ui->chooseFolderButton->setEnabled(newState);
+    ui->chooseOutputFolderButton->setEnabled(newState);
+    ui->simulateAllButton->setEnabled(newState);
 }
-
-void MainWindow::saveOutput(QString fileName){
-    QStringList outputList = currentLines;
-    outputs.insert(fileName, outputList);
-    currentLines.clear();
-}
-

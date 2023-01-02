@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>757</width>
+    <width>1190</width>
     <height>490</height>
    </rect>
   </property>
@@ -122,14 +122,7 @@
         <item>
          <widget class="QPushButton" name="simulateAllButton">
           <property name="text">
-           <string>Symuluj wszystkie</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="simulateChosenButton">
-          <property name="text">
-           <string>Symuluj wybrane</string>
+           <string>Uruchom wszystkie</string>
           </property>
          </widget>
         </item>
@@ -157,7 +150,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>757</width>
+     <width>1190</width>
      <height>25</height>
     </rect>
    </property>

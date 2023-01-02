@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define MAX_LENGTH 32768
 char* ltrim(char *s);
 char* rtrim(char *s);
 char* trim(char *s);
@@ -59,6 +58,7 @@ TaioSetFamily *parseFamily(FILE *fp)
 
     return family;
 }
+
 TaioSet *parseSet(char *line)
 {
     TaioSet *set = (TaioSet *)malloc(sizeof(TaioSet));

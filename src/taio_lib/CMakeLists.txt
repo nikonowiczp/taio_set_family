@@ -25,7 +25,7 @@ set(PROJECT_HEADERS
     "TaioHashMap.h"
     "TaioAlgorithms.h"
     "SetRunner.h")
-add_library (taio_lib SHARED ${PROJECT_HEADERS} ${PROJECT_SOURCES})
+add_library (taio_lib STATIC ${PROJECT_HEADERS} ${PROJECT_SOURCES})
 add_library(lib::taio_lib ALIAS taio_lib)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)

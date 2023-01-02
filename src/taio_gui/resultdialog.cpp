@@ -38,7 +38,9 @@ void ResultDialog::SaveFiles(){
             return;
         }
         QTextStream out(&file);
-        out << values.value(fileName).join("/n");
+        foreach(auto line, values.value(fileName)){
+            out<<line<<Qt::endl;
+        }
         file.flush();
         file.close();
     }

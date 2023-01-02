@@ -4,7 +4,8 @@
 #include <QMainWindow>
 #include <QMap>
 #include "resultdialog.h"
-
+#include <QThread>
+#include "calculatingworker.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -20,20 +21,22 @@ public:
 private:
     Ui::MainWindow *ui;
     QList<QString> *ChosenFiles = new QList<QString>();
-    QMap<QString, QStringList> outputs;
     QString chosenFolder = "";
-    void runSimulationForFile(QString file);
+
     void addFileToList(QString file);
     void addFilesToList(QStringList files);
-    void saveOutput(QString fileName);
-    static QStringList currentLines;
-    static void printLineToOutput(const char * format, ...);
-
+    QThread workerThread;
+    void setLoading(bool newState);
 private slots:
     void on_chooseFilesButton_clicked();
     void on_chooseFolderButton_clicked();
     void on_simulateAllButton_clicked();
     void on_simulateChosenButton_clicked();
     void on_chooseOutputFolderButton_clicked();
+public slots:
+    void handleResults(const QMap<QString, QStringList> * result);
+signals:
+    void operate(const QStringList &);
+
 };
 #endif // MAINWINDOW_H

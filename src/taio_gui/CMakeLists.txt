@@ -22,6 +22,10 @@ set(PROJECT_SOURCES
         resultdialog.h
         resultdialog.cpp
         resultdialog.ui
+        calculatingworker.h
+        calculatingworker.cpp
+        stringlistmap.h
+        stringlistmap.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
